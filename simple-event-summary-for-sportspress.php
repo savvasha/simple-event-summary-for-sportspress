@@ -194,7 +194,7 @@ function esfs_event_summary( $id ) {
 			// Get linear timeline from event.
 			$timeline = $event->timeline( false, true );
 			// Get players link option.
-			$link_players = get_option( 'sportspress_link_players', 'no' ) == 'yes' ? true : false;
+			$link_players = get_option( 'sportspress_link_players', 'no' ) === 'yes' ? true : false;
 			// Gather all selected performances in one array.
 			$scoring_performances         = get_option( 'esfs_show_scoring_performances_list', array() );
 			$special_scoring_performances = get_option( 'esfs_show_special_scoring_performances_list', array() );
@@ -214,16 +214,16 @@ function esfs_event_summary( $id ) {
 				}
 
 				$key = sp_array_value( $details, 'key', '' );
-				if ( in_array( $key, $esfs_all_performances ) ) {
+				if ( in_array( $key, $esfs_all_performances, true ) ) {
 					$side = sp_array_value( $details, 'side', 'home' );
 
 					if ( 'home' === $side ) {
-						if ( in_array( $key, $scoring_performances ) ) {
+						if ( in_array( $key, $scoring_performances, true ) ) {
 							$goals_home++;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
 							$summary_array[]       = $details;
-						} elseif ( in_array( $key, $special_scoring_performances ) ) {
+						} elseif ( in_array( $key, $special_scoring_performances, true ) ) {
 							$goals_away++;
 							$details['side']       = 'away';
 							$details['goals_home'] = $goals_home;
@@ -235,12 +235,12 @@ function esfs_event_summary( $id ) {
 							$summary_array[]       = $details;
 						}
 					} elseif ( 'away' === $side ) {
-						if ( in_array( $key, $scoring_performances ) ) {
+						if ( in_array( $key, $scoring_performances, true ) ) {
 							$goals_away++;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
 							$summary_array[]       = $details;
-						} elseif ( in_array( $key, $special_scoring_performances ) ) {
+						} elseif ( in_array( $key, $special_scoring_performances, true ) ) {
 							$goals_home++;
 							$details['side']       = 'home';
 							$details['goals_home'] = $goals_home;
@@ -275,12 +275,12 @@ function esfs_event_summary( $id ) {
 				echo '<tr>';
 				if ( 'home' === $side ) {
 					echo '<td class="mhr-name">' . wp_kses_post( $name ) . ' ' . wp_kses_post( $time ) . '\' ' . wp_kses_post( $icon ) . '</td>';
-					echo '<td class="mhr-marker"><div>' . wp_kses_post( $home_goals ) . $delimiter . wp_kses_post( $away_goals ) . '</div></td>';
+					echo '<td class="mhr-marker"><div>' . wp_kses_post( $home_goals ) . esc_attr( $delimiter ) . wp_kses_post( $away_goals ) . '</div></td>';
 					echo '<td class="mhr-name"></td>';
 				} else {
 					echo '<td class="mhr-name"></td>';
-					echo '<td class="mhr-marker"><div>' . wp_kses_post( $home_goals ) . $delimiter . wp_kses_post( $away_goals ) . '</div></td>';
-					echo '<td class="mhr-name">' . wp_kses_post( $icon ) . ' ' . wp_kses_post( $time ) . '\'' . ' ' . wp_kses_post( $name ) . '</td>';
+					echo '<td class="mhr-marker"><div>' . wp_kses_post( $home_goals ) . esc_attr( $delimiter ) . wp_kses_post( $away_goals ) . '</div></td>';
+					echo '<td class="mhr-name">' . wp_kses_post( $icon ) . ' ' . wp_kses_post( $time ) . '\' ' . wp_kses_post( $name ) . '</td>';
 				}
 				echo '</tr>';
 			}
@@ -290,10 +290,10 @@ function esfs_event_summary( $id ) {
 		if ( 'yes' === get_option( 'esfs_show_officials', 'yes' ) ) {
 			// Get appointed officials from event.
 			$data                = $event->appointments();
-			$link_officials      = get_option( 'sportspress_link_officials', 'no' ) == 'yes' ? true : false;
+			$link_officials      = get_option( 'sportspress_link_officials', 'no' ) === 'yes' ? true : false;
 			$esfs_show_officials = get_option( 'esfs_show_officials_list', array() );
 
-			// The first row should be column labels
+			// The first row should be column labels.
 			if ( isset( $data[0] ) ) {
 				$labels = $data[0];
 				unset( $data[0] );
@@ -307,7 +307,7 @@ function esfs_event_summary( $id ) {
 							$official_name = '<a href="' . get_post_permalink( $official_id ) . '">' . $official_name . '</a>';
 						}
 
-						// Display referee information in table rows
+						// Display referee information in table rows.
 						echo '<tr><td colspan="100%" class="mhr-referee-name">' . wp_kses_post( $labels[ $esfs_show_official ] . ': ' . $official_name ) . '</td></tr>';
 					}
 				}
