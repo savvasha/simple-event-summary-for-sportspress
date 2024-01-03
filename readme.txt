@@ -38,6 +38,11 @@ Once activated, the plugin automatically adds the event summary below the main e
 = 1.0.0 =
 * Initial release.
 
+== Upgrade Notice ==
+
+= 1.0.0 =
+* Initial release.
+
 == Frequently Asked Questions ==
 
 = Can I customize the display options? =
