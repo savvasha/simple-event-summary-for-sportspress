@@ -47,8 +47,8 @@ add_action( 'wp_enqueue_scripts', 'esfs_adding_scripts' );
 function esfs_add_settings( $settings ) {
 	// Initialize arrays to store performance, team, and official data.
 	$esfs_performances = array();
-	$esfs_teams = array();
-	$esfs_officials = array();
+	$esfs_teams        = array();
+	$esfs_officials    = array();
 
 	// Retrieve and populate performance data.
 	$sp_performances = get_posts(
@@ -62,7 +62,7 @@ function esfs_add_settings( $settings ) {
 	foreach ( $sp_performances as $sp_performance ) {
 		$esfs_performances[ $sp_performance->post_name ] = $sp_performance->post_title;
 	}
-	
+
 	// Retrieve and populate team data.
 	$sp_teams = get_posts(
 		array(
@@ -75,20 +75,20 @@ function esfs_add_settings( $settings ) {
 	foreach ( $sp_teams as $sp_team ) {
 		$esfs_teams[ $sp_team->ID ] = $sp_team->post_title;
 	}
-	
+
 	// Retrieve and populate officials data.
 	$sp_officials = get_terms(
 		array(
 			'taxonomy'   => 'sp_duty',
 			'hide_empty' => false,
-			'orderby'     => 'menu_order',
-			'order'       => 'ASC',
+			'orderby'    => 'menu_order',
+			'order'      => 'ASC',
 		)
 	);
 	foreach ( $sp_officials as $sp_official ) {
 		$esfs_officials[ $sp_official->slug ] = $sp_official->name;
 	}
-	
+
 	// Merge SportsPress Event Settings with additional Event Summary options.
 	$settings = array_merge(
 		$settings,
@@ -170,41 +170,41 @@ function esfs_event_summary( $id ) {
 	if ( ! isset( $id ) ) {
 		$id = get_the_ID();
 	}
-	
-	$teams_filtering = get_option( 'esfs_show_teams_list', false );
+
+	$teams_filtering      = get_option( 'esfs_show_teams_list', false );
 	$event_teams_findings = true;
-	
-	if ( $teams_filtering && !empty( $teams_filtering ) ){
-		$event_teams = get_post_meta( $id, 'sp_team', false );
-		$teams_filtering = array_map( 'intval', $teams_filtering );
+
+	if ( $teams_filtering && ! empty( $teams_filtering ) ) {
+		$event_teams          = get_post_meta( $id, 'sp_team', false );
+		$teams_filtering      = array_map( 'intval', $teams_filtering );
 		$event_teams_findings = array_intersect( $teams_filtering, $event_teams );
 	}
 
-    if ( true === $event_teams_findings || ( is_array( $event_teams_findings ) && !empty( $event_teams_findings ) ) ) {
-        
-        // Create a new SP_Event instance.
-        $event = new SP_Event( $id );
-		
+	if ( true === $event_teams_findings || ( is_array( $event_teams_findings ) && ! empty( $event_teams_findings ) ) ) {
+
+		// Create a new SP_Event instance.
+		$event = new SP_Event( $id );
+
 		// Output HTML for summary.
 		echo '<div class="match-header-resume">';
 		echo '<table>';
 		echo '<tbody>';
 
-        if ( 'yes' === get_option( 'esfs_show_performances', 'yes' ) ) {
+		if ( 'yes' === get_option( 'esfs_show_performances', 'yes' ) ) {
 			// Get linear timeline from event.
 			$timeline = $event->timeline( false, true );
 			// Get players link option.
 			$link_players = get_option( 'sportspress_link_players', 'no' ) == 'yes' ? true : false;
 			// Gather all selected performances in one array.
-			$scoring_performances = get_option( 'esfs_show_scoring_performances_list', array() );
+			$scoring_performances         = get_option( 'esfs_show_scoring_performances_list', array() );
 			$special_scoring_performances = get_option( 'esfs_show_special_scoring_performances_list', array() );
-			$other_performances = get_option( 'esfs_show_other_performances_list', array() );
-			$esfs_all_performances = array_merge( $scoring_performances, $special_scoring_performances, $other_performances );
+			$other_performances           = get_option( 'esfs_show_other_performances_list', array() );
+			$esfs_all_performances        = array_merge( $scoring_performances, $special_scoring_performances, $other_performances );
 
-			// Initiate variables.		
+			// Initiate variables.
 			$summary_array = array();
-			$goals_home = 0;
-			$goals_away = 0;
+			$goals_home    = 0;
+			$goals_away    = 0;
 
 			// Iterate through the event timeline.
 			foreach ( $timeline as $details ) {
@@ -222,34 +222,34 @@ function esfs_event_summary( $id ) {
 							$goals_home++;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						} elseif ( in_array( $key, $special_scoring_performances ) ) {
 							$goals_away++;
-							$details['side'] = 'away';
+							$details['side']       = 'away';
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						} else {
 							$details['goals_home'] = null;
 							$details['goals_away'] = null;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						}
 					} elseif ( 'away' === $side ) {
 						if ( in_array( $key, $scoring_performances ) ) {
 							$goals_away++;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						} elseif ( in_array( $key, $special_scoring_performances ) ) {
 							$goals_home++;
-							$details['side'] = 'home';
+							$details['side']       = 'home';
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						} else {
 							$details['goals_home'] = null;
 							$details['goals_away'] = null;
-							$summary_array[] = $details;
+							$summary_array[]       = $details;
 						}
 					}
 				}
@@ -257,18 +257,18 @@ function esfs_event_summary( $id ) {
 
 			// Iterate through summary details and display information.
 			foreach ( $summary_array as $summary_row ) {
-				$side = sp_array_value( $summary_row, 'side', 'home' );
-				$icon = sp_array_value( $summary_row, 'icon', '' );
-				$time = sp_array_value( $summary_row, 'time', false );
+				$side       = sp_array_value( $summary_row, 'side', 'home' );
+				$icon       = sp_array_value( $summary_row, 'icon', '' );
+				$time       = sp_array_value( $summary_row, 'time', false );
 				$home_goals = sp_array_value( $summary_row, 'goals_home', false );
 				$away_goals = sp_array_value( $summary_row, 'goals_away', false );
-				$delimiter = $home_goals || $away_goals ? '-' : '';
+				$delimiter  = $home_goals || $away_goals ? '-' : '';
 
 				// Generate player name with or without link based on settings.
 				if ( $link_players ) {
-					$name = '<a href="' . esc_url( get_permalink( sp_array_value( $summary_row, "id", "" ) ) ) . '">' . sp_array_value( $summary_row, "name", __( "Player", "sportspress" ) ) . '</a>';
+					$name = '<a href="' . esc_url( get_permalink( sp_array_value( $summary_row, 'id', '' ) ) ) . '">' . sp_array_value( $summary_row, 'name', __( 'Player', 'sportspress' ) ) . '</a>';
 				} else {
-					$name = sp_array_value( $summary_row, "name", __( "Player", "sportspress" ) );
+					$name = sp_array_value( $summary_row, 'name', __( 'Player', 'sportspress' ) );
 				}
 
 				// Display performances summary in table rows.
@@ -289,12 +289,12 @@ function esfs_event_summary( $id ) {
 		// Display officials information.
 		if ( 'yes' === get_option( 'esfs_show_officials', 'yes' ) ) {
 			// Get appointed officials from event.
-			$data = $event->appointments();
-			$link_officials = get_option( 'sportspress_link_officials', 'no' ) == 'yes' ? true : false;
+			$data                = $event->appointments();
+			$link_officials      = get_option( 'sportspress_link_officials', 'no' ) == 'yes' ? true : false;
 			$esfs_show_officials = get_option( 'esfs_show_officials_list', array() );
 
 			// The first row should be column labels
-			if ( isset( $data[0] ) ){ 
+			if ( isset( $data[0] ) ) {
 				$labels = $data[0];
 				unset( $data[0] );
 			}
@@ -314,10 +314,10 @@ function esfs_event_summary( $id ) {
 			}
 		}
 
-        echo '</tbody>';
-        echo '</table>';
-        echo '</div>';
-    }
+		echo '</tbody>';
+		echo '</table>';
+		echo '</div>';
+	}
 }
 
 /**
