@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Event Summary for SportsPress
  * Description: Add a brief event summary (i.e. scorers) below Event main card.
- * Version: 1.0
+ * Version: 1.1
  * Author: Savvas
  * Author URI: https://savvasha.com
  * Requires at least: 5.3
@@ -189,6 +189,8 @@ function esfs_event_summary( $id ) {
 		echo '<table>';
 		echo '<tbody>';
 
+		do_action( 'esfs_before_inner_event_summary', $event );
+
 		if ( 'yes' === get_option( 'esfs_show_performances', 'yes' ) ) {
 			// Get linear timeline from event.
 			$timeline = $event->timeline( false, true );
@@ -312,6 +314,8 @@ function esfs_event_summary( $id ) {
 				}
 			}
 		}
+
+		do_action( 'esfs_after_inner_event_summary', $event );
 
 		echo '</tbody>';
 		echo '</table>';

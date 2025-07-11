@@ -1,11 +1,10 @@
 === Simple Event Summary for SportsPress ===
 Contributors: savvasha
-Donate link: https://bit.ly/3NLUtMh
 Tags: sportspress, events, summary, resume
 Requires at least: 5.3
 Requires PHP: 7.4
-Tested up to: 6.6
-Stable tag: 1.0
+Tested up to: 6.8
+Stable tag: 1.1
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -20,6 +19,7 @@ The Simple Event Summary for SportsPress plugin enhances your SportsPress plugin
 - Display performances, including goals, penalties, and other key events.
 - Show referee information.
 - Customizable display options for different event types and teams.
+- Action hooks for custom data
 
 == Installation ==
 
@@ -29,6 +29,9 @@ The Simple Event Summary for SportsPress plugin enhances your SportsPress plugin
 == Usage ==
 
 Once activated, the plugin automatically adds the event summary below the main event card for SportsPress events. You can customize what data will be shown at `SportsPress->Settings->Events->Event Summary`.
+Action Hooks:
+* `esfs_before_inner_event_summary` – Fires before the event summary table is rendered. Allows developers to inject custom table content at the top of the table.
+* `esfs_after_inner_event_summary` – Fires after the event summary table is rendered. Useful for appending additional table information at the end of the table.
 
 == Screenshots ==
 
@@ -37,12 +40,15 @@ Once activated, the plugin automatically adds the event summary below the main e
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.1 =
+* Added new hooks.
+
+= 1.0 =
 * Initial release.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
+= 1.0 =
 * Initial release.
 
 == Frequently Asked Questions ==
