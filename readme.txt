@@ -3,11 +3,13 @@ Contributors: savvasha
 Donate link: https://bit.ly/3NLUtMh
 Tags: sportspress, events, summary, resume
 Requires at least: 5.3
-Requires PHP: 7.0
-Tested up to: 6.4
-Stable tag: 1.0.0
+Requires PHP: 7.4
+Tested up to: 6.6
+Stable tag: 1.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
+
+The Simple Event Summary for SportsPress plugin enhances your SportsPress plugin by adding a brief event summary below the main event card.
 
 == Description ==
 

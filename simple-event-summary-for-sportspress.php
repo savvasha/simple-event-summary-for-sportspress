@@ -2,11 +2,10 @@
 /**
  * Plugin Name: Simple Event Summary for SportsPress
  * Description: Add a brief event summary (i.e. scorers) below Event main card.
- * Version: 1.0.0
+ * Version: 1.0
  * Author: Savvas
  * Author URI: https://savvasha.com
  * Requires at least: 5.3
- * Requires PHP: 7.0
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl.html
  *
