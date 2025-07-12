@@ -4,7 +4,7 @@ Tags: sportspress, events, summary, resume
 Requires at least: 5.3
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -39,6 +39,9 @@ Action Hooks:
 2. Event summary with scorers and referee details.
 
 == Changelog ==
+
+= 1.2 =
+* Added new css class based on event status.
 
 = 1.1 =
 * Added new hooks.

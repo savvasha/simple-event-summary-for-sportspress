@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Event Summary for SportsPress
  * Description: Add a brief event summary (i.e. scorers) below Event main card.
- * Version: 1.1
+ * Version: 1.2
  * Author: Savvas
  * Author URI: https://savvasha.com
  * Requires at least: 5.3
@@ -184,8 +184,11 @@ function esfs_event_summary( $id ) {
 		// Create a new SP_Event instance.
 		$event = new SP_Event( $id );
 
+		// Get event status to use as css class.
+		$event_status = $event->post->post_status;
+
 		// Output HTML for summary.
-		echo '<div class="match-header-resume">';
+		echo '<div class="match-header-resume ' . esc_attr( $event_status ) . '">';
 		echo '<table>';
 		echo '<tbody>';
 
