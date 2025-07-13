@@ -4,7 +4,7 @@ Tags: sportspress, events, summary, resume
 Requires at least: 5.3
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 1.2
+Stable tag: 2.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -40,11 +40,21 @@ Action Hooks:
 
 == Changelog ==
 
+= 2.0 =
+* Compatibility updates for WordPress 6.8.
+* Improved code quality and adherence to WordPress Coding Standards.
+* Enhanced security with better data sanitization and escaping.
+* Added support for customizable event summary display via SportsPress settings.
+* Enhanced error handling and validation for event and team data.
+* Fixed minor issues with official links and display logic.
+* Improved hooks for extensibility: `esfs_before_inner_event_summary` and `esfs_after_inner_event_summary`.
+* Minor bug fixes and performance improvements.
+
 = 1.2 =
-* Added new css class based on event status.
+* Minor tweaks.
 
 = 1.1 =
-* Added new hooks.
+* Minor tweaks.
 
 = 1.0 =
 * Initial release.

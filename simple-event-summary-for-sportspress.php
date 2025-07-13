@@ -2,10 +2,11 @@
 /**
  * Plugin Name: Simple Event Summary for SportsPress
  * Description: Add a brief event summary (i.e. scorers) below Event main card.
- * Version: 1.2
+ * Version: 2.0
  * Author: Savvas
  * Author URI: https://savvasha.com
  * Requires at least: 5.3
+ * Text Domain: esfs
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl.html
  *
@@ -23,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! defined( 'ESFS_PLUGIN_BASE' ) ) {
 	define( 'ESFS_PLUGIN_BASE', plugin_basename( __FILE__ ) );
 }
+
 if ( ! defined( 'ESFS_PLUGIN_DIR' ) ) {
 	define( 'ESFS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
@@ -31,10 +33,24 @@ if ( ! defined( 'ESFS_PLUGIN_URL' ) ) {
 	define( 'ESFS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
+if ( ! defined( 'ESFS_PLUGIN_VERSION' ) ) {
+	define( 'ESFS_PLUGIN_VERSION', '2.0.0' );
+}
+
 // Hooks.
 add_filter( 'sportspress_event_settings', 'esfs_add_settings' );
 
-add_action( 'sportspress_after_event_logos', 'esfs_event_summary' );
+// Get load type.
+$esfs_load_type = get_option( 'esfs_load_type', 'auto' );
+
+if ( 'auto' === $esfs_load_type ) {
+	// Add action to display event summary.
+	add_action( 'sportspress_after_event_logos', 'esfs_event_summary' );
+} else {
+	// Add action to display event summary.
+	add_filter( 'sportspress_event_templates', 'esfs_add_templates' );
+}
+
 add_action( 'wp_enqueue_scripts', 'esfs_adding_scripts' );
 
 /**
@@ -58,8 +74,10 @@ function esfs_add_settings( $settings ) {
 			'order'       => 'ASC',
 		)
 	);
-	foreach ( $sp_performances as $sp_performance ) {
-		$esfs_performances[ $sp_performance->post_name ] = $sp_performance->post_title;
+	if ( ! is_wp_error( $sp_performances ) && is_array( $sp_performances ) ) {
+		foreach ( $sp_performances as $sp_performance ) {
+			$esfs_performances[ $sp_performance->post_name ] = $sp_performance->post_title;
+		}
 	}
 
 	// Retrieve and populate team data.
@@ -71,8 +89,10 @@ function esfs_add_settings( $settings ) {
 			'order'       => 'ASC',
 		)
 	);
-	foreach ( $sp_teams as $sp_team ) {
-		$esfs_teams[ $sp_team->ID ] = $sp_team->post_title;
+	if ( ! is_wp_error( $sp_teams ) && is_array( $sp_teams ) ) {
+		foreach ( $sp_teams as $sp_team ) {
+			$esfs_teams[ $sp_team->ID ] = $sp_team->post_title;
+		}
 	}
 
 	// Retrieve and populate officials data.
@@ -84,8 +104,10 @@ function esfs_add_settings( $settings ) {
 			'order'      => 'ASC',
 		)
 	);
-	foreach ( $sp_officials as $sp_official ) {
-		$esfs_officials[ $sp_official->slug ] = $sp_official->name;
+	if ( ! is_wp_error( $sp_officials ) && is_array( $sp_officials ) ) {
+		foreach ( $sp_officials as $sp_official ) {
+			$esfs_officials[ $sp_official->slug ] = $sp_official->name;
+		}
 	}
 
 	// Merge SportsPress Event Settings with additional Event Summary options.
@@ -93,7 +115,7 @@ function esfs_add_settings( $settings ) {
 		$settings,
 		array(
 			array(
-				'title' => __( 'Event Summary', 'sportspress' ),
+				'title' => __( 'Event Summary', 'esfs' ),
 				'type'  => 'title',
 				'id'    => 'esfs_event_summary_options',
 			),
@@ -102,8 +124,8 @@ function esfs_add_settings( $settings ) {
 			'esfs_event_summary_options',
 			array(
 				array(
-					'title'         => __( 'Display', 'sportspress' ),
-					'desc'          => __( 'Performances', 'sportspress' ),
+					'title'         => __( 'Display', 'esfs' ),
+					'desc'          => __( 'Performances', 'esfs' ),
 					'id'            => 'esfs_show_performances',
 					'default'       => 'yes',
 					'type'          => 'checkbox',
@@ -111,41 +133,52 @@ function esfs_add_settings( $settings ) {
 				),
 
 				array(
-					'desc'          => __( 'Officials', 'sportspress' ),
+					'desc'          => __( 'Officials', 'esfs' ),
 					'id'            => 'esfs_show_officials',
 					'default'       => 'yes',
 					'type'          => 'checkbox',
 					'checkboxgroup' => 'end',
 				),
 				array(
-					'title'   => esc_attr__( 'Scoring Performances to show (i.e. goals, penalties etc.)', 'sportspress' ),
+					'title'   => esc_attr__( 'Scoring Performances to show (i.e. goals, penalties etc.)', 'esfs' ),
 					'id'      => 'esfs_show_scoring_performances_list',
 					'type'    => 'multiselect',
 					'options' => $esfs_performances,
 				),
 				array(
-					'title'   => esc_attr__( 'Special Scoring Performances to show (i.e. own goals)', 'sportspress' ),
+					'title'   => esc_attr__( 'Special Scoring Performances to show (i.e. own goals)', 'esfs' ),
 					'id'      => 'esfs_show_special_scoring_performances_list',
 					'type'    => 'multiselect',
 					'options' => $esfs_performances,
 				),
 				array(
-					'title'   => esc_attr__( 'Other Performances to show (i.e. assists)', 'sportspress' ),
+					'title'   => esc_attr__( 'Other Performances to show (i.e. assists)', 'esfs' ),
 					'id'      => 'esfs_show_other_performances_list',
 					'type'    => 'multiselect',
 					'options' => $esfs_performances,
 				),
 				array(
-					'title'   => esc_attr__( 'Officials to show', 'sportspress' ),
+					'title'   => esc_attr__( 'Officials to show', 'esfs' ),
 					'id'      => 'esfs_show_officials_list',
 					'type'    => 'multiselect',
 					'options' => $esfs_officials,
 				),
 				array(
-					'title'   => esc_attr__( 'Display summary on events with teams (empty for all)', 'sportspress' ),
+					'title'   => esc_attr__( 'Display summary on events with teams (empty for all)', 'esfs' ),
 					'id'      => 'esfs_show_teams_list',
 					'type'    => 'multiselect',
 					'options' => $esfs_teams,
+				),
+				array(
+					'title'   => esc_attr__( 'Load type', 'esfs' ),
+					'id'      => 'esfs_load_type',
+					'type'    => 'radio',
+					'options' => array(
+						'auto' => esc_attr__( 'Auto', 'esfs' ),
+						'layout' => esc_attr__( 'SportsPress Layout', 'esfs' ),
+					),
+					'default' => 'auto',
+					'class'   => 'esfs-load-type',
 				),
 			)
 		),
@@ -162,12 +195,17 @@ function esfs_add_settings( $settings ) {
 /**
  * Display event summary including scorers and referee information.
  *
- * @param int $id Event ID.
+ * @param int|null $id Event ID.
  */
-function esfs_event_summary( $id ) {
+function esfs_event_summary( $id = null ) {
 	// Set the ID if not provided.
 	if ( ! isset( $id ) ) {
 		$id = get_the_ID();
+	}
+
+	// Validate the ID is a valid post ID and is an sp_event.
+	if ( ! $id || ! is_numeric( $id ) || get_post_type( $id ) !== 'sp_event' ) {
+		return;
 	}
 
 	$teams_filtering      = get_option( 'esfs_show_teams_list', false );
@@ -270,9 +308,9 @@ function esfs_event_summary( $id ) {
 
 				// Generate player name with or without link based on settings.
 				if ( $link_players ) {
-					$name = '<a href="' . esc_url( get_permalink( sp_array_value( $summary_row, 'id', '' ) ) ) . '">' . sp_array_value( $summary_row, 'name', __( 'Player', 'sportspress' ) ) . '</a>';
+					$name = '<a href="' . esc_url( get_permalink( sp_array_value( $summary_row, 'id', '' ) ) ) . '">' . sp_array_value( $summary_row, 'name', __( 'Player', 'esfs' ) ) . '</a>';
 				} else {
-					$name = sp_array_value( $summary_row, 'name', __( 'Player', 'sportspress' ) );
+					$name = sp_array_value( $summary_row, 'name', __( 'Player', 'esfs' ) );
 				}
 
 				// Display performances summary in table rows.
@@ -334,9 +372,29 @@ function esfs_event_summary( $id ) {
 function esfs_adding_scripts() {
 	global $post;
 	if ( is_singular( 'sp_event' ) ) {
-		// Some css code.
-		wp_enqueue_style( 'simple_event_summary_for_sportspress', ESFS_PLUGIN_URL . 'assets/css/front.css', array(), '1.0.0' );
-
+		// Check if event summary should be displayed.
+		$show_performances = get_option( 'esfs_show_performances', 'yes' );
+		$show_officials    = get_option( 'esfs_show_officials', 'yes' );
+		
+		if ( 'yes' === $show_performances || 'yes' === $show_officials ) {
+			// Enqueue CSS for event summary.
+			wp_enqueue_style( 'simple_event_summary_for_sportspress', ESFS_PLUGIN_URL . 'assets/css/front.css', array(), ESFS_PLUGIN_VERSION );
+		}
 	}
+}
 
+/**
+ * Add templates to event layout.
+ *
+ * @param array $templates Existing templates array.
+ * @return array Modified templates array.
+ */
+function esfs_add_templates( $templates = array() ) {
+	$templates['esfs'] = array(
+		'title' => __( 'Event Summary', 'esfs' ),
+		'option' => 'sportspress_event_show_esfs',
+		'action' => 'esfs_event_summary',
+		'default' => 'no',
+	);
+	return $templates;
 }
