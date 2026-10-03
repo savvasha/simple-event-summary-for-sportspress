@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset name="Simple Event Summary for SportsPress">
+	<description>WordPress Coding Standards for Simple Event Summary for SportsPress (PHP).</description>
+
+	<!-- Scan the current directory. -->
+	<file>.</file>
+
+	<!-- Only scan PHP files; JS/CSS are linted with ESLint/Stylelint. -->
+	<arg name="extensions" value="php"/>
+
+	<!-- Exclude third-party code and build artifacts. -->
+	<exclude-pattern>*/assets/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!-- Show sniff codes and progress. -->
+	<arg value="ps"/>
+
+	<!-- Minimum supported WordPress version. -->
+	<config name="minimum_wp_version" value="5.3"/>
+
+	<!-- The WordPress Coding Standards ruleset. -->
+	<rule ref="WordPress"/>
+
+	<!-- Check PHP cross-version compatibility (minimum supported PHP). -->
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Verify text domain and global prefixes. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="esfs"/>
+			</property>
+		</properties>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="esfs"/>
+				<element value="ESFS"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

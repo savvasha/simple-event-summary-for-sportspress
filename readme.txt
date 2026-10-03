@@ -3,8 +3,8 @@ Contributors: savvasha
 Tags: sportspress, events, summary, resume
 Requires at least: 5.3
 Requires PHP: 7.4
-Tested up to: 6.8
-Stable tag: 2.0
+Tested up to: 7.1
+Stable tag: 2.1
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -39,6 +39,10 @@ Action Hooks:
 2. Event summary with scorers and referee details.
 
 == Changelog ==
+
+= 2.1 =
+* Tested up to WordPress 7.1
+* DEV: Codebase brought in line with WordPress Coding Standards; no functional changes
 
 = 2.0 =
 * Compatibility updates for WordPress 6.8.

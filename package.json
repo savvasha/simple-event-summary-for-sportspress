@@ -1,0 +1,17 @@
+{
+	"name": "simple-event-summary-for-sportspress",
+	"version": "2.1.0",
+	"description": "Linting tooling for Simple Event Summary for SportsPress.",
+	"private": true,
+	"author": "Savvas",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"lint:css": "stylelint \"assets/css/**/*.css\"",
+		"lint:css:fix": "stylelint \"assets/css/**/*.css\" --fix"
+	},
+	"devDependencies": {
+		"@wordpress/stylelint-config": "^26.0.0",
+		"stylelint": "^17.14.1",
+		"stylelint-scss": "^7.2.0"
+	}
+}

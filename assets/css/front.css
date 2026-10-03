@@ -1,36 +1,43 @@
 .match-header-resume {
-    line-height: 24px;
-    text-align: center;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /*padding: 10px 20px;*/
-	padding: 0px;
-     
+	line-height: 24px;
+	text-align: center;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	/*padding: 10px 20px;*/
+	padding: 0;
+
 }
+
 .match-header-resume table td {
-    border: 0px;
-	padding: 0px;
+	border: 0;
+	padding: 0;
 	vertical-align: middle !important;
 }
+
 .match-header-resume td:first-child {
-    text-align: right;
+	text-align: right;
 }
+
 .match-header-resume td:last-child {
-    text-align: left;
+	text-align: left;
 }
+
 .match-header-resume .mhr-name {
-    width: 290px;
+	width: 290px;
 }
+
 .match-header-resume .mhr-marker div {
-    width: 60px;
-    margin: auto;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-    border-radius: 3px;
+	width: 60px;
+	margin: auto;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
 }
+
 .match-header-resume .mhr-referee-name {
 	font-style: italic;
 	text-align: center !important;

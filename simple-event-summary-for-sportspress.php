@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Event Summary for SportsPress
  * Description: Add a brief event summary (i.e. scorers) below Event main card.
- * Version: 2.0
+ * Version: 2.1
  * Author: Savvas
  * Author URI: https://savvasha.com
  * Requires at least: 5.3
@@ -34,7 +34,7 @@ if ( ! defined( 'ESFS_PLUGIN_URL' ) ) {
 }
 
 if ( ! defined( 'ESFS_PLUGIN_VERSION' ) ) {
-	define( 'ESFS_PLUGIN_VERSION', '2.0.0' );
+	define( 'ESFS_PLUGIN_VERSION', '2.1.0' );
 }
 
 // Hooks.
@@ -174,7 +174,7 @@ function esfs_add_settings( $settings ) {
 					'id'      => 'esfs_load_type',
 					'type'    => 'radio',
 					'options' => array(
-						'auto' => esc_attr__( 'Auto', 'esfs' ),
+						'auto'   => esc_attr__( 'Auto', 'esfs' ),
 						'layout' => esc_attr__( 'SportsPress Layout', 'esfs' ),
 					),
 					'default' => 'auto',
@@ -261,12 +261,12 @@ function esfs_event_summary( $id = null ) {
 
 					if ( 'home' === $side ) {
 						if ( in_array( $key, $scoring_performances, true ) ) {
-							$goals_home++;
+							++$goals_home;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
 							$summary_array[]       = $details;
 						} elseif ( in_array( $key, $special_scoring_performances, true ) ) {
-							$goals_away++;
+							++$goals_away;
 							$details['side']       = 'away';
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
@@ -278,12 +278,12 @@ function esfs_event_summary( $id = null ) {
 						}
 					} elseif ( 'away' === $side ) {
 						if ( in_array( $key, $scoring_performances, true ) ) {
-							$goals_away++;
+							++$goals_away;
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
 							$summary_array[]       = $details;
 						} elseif ( in_array( $key, $special_scoring_performances, true ) ) {
-							$goals_home++;
+							++$goals_home;
 							$details['side']       = 'home';
 							$details['goals_home'] = $goals_home;
 							$details['goals_away'] = $goals_away;
@@ -375,7 +375,7 @@ function esfs_adding_scripts() {
 		// Check if event summary should be displayed.
 		$show_performances = get_option( 'esfs_show_performances', 'yes' );
 		$show_officials    = get_option( 'esfs_show_officials', 'yes' );
-		
+
 		if ( 'yes' === $show_performances || 'yes' === $show_officials ) {
 			// Enqueue CSS for event summary.
 			wp_enqueue_style( 'simple_event_summary_for_sportspress', ESFS_PLUGIN_URL . 'assets/css/front.css', array(), ESFS_PLUGIN_VERSION );
@@ -391,9 +391,9 @@ function esfs_adding_scripts() {
  */
 function esfs_add_templates( $templates = array() ) {
 	$templates['esfs'] = array(
-		'title' => __( 'Event Summary', 'esfs' ),
-		'option' => 'sportspress_event_show_esfs',
-		'action' => 'esfs_event_summary',
+		'title'   => __( 'Event Summary', 'esfs' ),
+		'option'  => 'sportspress_event_show_esfs',
+		'action'  => 'esfs_event_summary',
 		'default' => 'no',
 	);
 	return $templates;
